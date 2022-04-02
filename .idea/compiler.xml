@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="game" />
         <module name="OTTOSoft_Nine-Mens-Morris" />
+        <module name="NineMensMorris" />
       </profile>
     </annotationProcessing>
   </component>
