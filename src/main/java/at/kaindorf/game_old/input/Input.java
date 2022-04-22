@@ -1,4 +1,4 @@
-package at.kaindorf.game.input;
+package at.kaindorf.game_old.input;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

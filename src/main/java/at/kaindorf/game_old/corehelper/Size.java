@@ -1,4 +1,4 @@
-package at.kaindorf.game.corehelper;
+package at.kaindorf.game_old.corehelper;
 
 public class Size {
     private int width;

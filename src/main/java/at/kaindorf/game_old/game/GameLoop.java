@@ -1,6 +1,4 @@
-package at.kaindorf.game.game;
-
-import at.kaindorf.game.game.Game;
+package at.kaindorf.game_old.game;
 
 public class GameLoop implements Runnable {
     private Game game;

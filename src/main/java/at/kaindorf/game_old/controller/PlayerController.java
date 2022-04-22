@@ -1,6 +1,6 @@
-package at.kaindorf.game.controller;
+package at.kaindorf.game_old.controller;
 
-import at.kaindorf.game.input.Input;
+import at.kaindorf.game_old.input.Input;
 
 import java.awt.event.KeyEvent;
 

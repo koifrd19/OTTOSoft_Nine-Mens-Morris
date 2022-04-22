@@ -1,7 +1,7 @@
-package at.kaindorf.game.display;
+package at.kaindorf.game_old.display;
 
-import at.kaindorf.game.game.Game;
-import at.kaindorf.game.input.Input;
+import at.kaindorf.game_old.game.state.State;
+import at.kaindorf.game_old.input.Input;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,14 +35,14 @@ public class Display extends JFrame {
         setVisible(true);
     }
 
-    public void render(Game game) {
+    public void render(State state) {
         BufferStrategy bufferStrategy = canvas.getBufferStrategy();
         Graphics graphics = bufferStrategy.getDrawGraphics();
 
         graphics.setColor(Color.BLACK);
         graphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-        renderer.render(game, graphics);
+        renderer.render(state, graphics);
 
         graphics.dispose(); // frees memory
         bufferStrategy.show(); // brings buffer to the front

@@ -1,44 +1,24 @@
-package at.kaindorf.game.entity;
+package at.kaindorf.game_old.entity;
 
-import at.kaindorf.game.controller.Controller;
-import at.kaindorf.game.corehelper.Position;
-import at.kaindorf.game.entity.GameObject;
+import at.kaindorf.game_old.controller.Controller;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Token extends GameObject {
+public class Token extends MovingEntity {
 
-    private Controller controller;
 
     public Token(Controller controller) {
-        super();
-        this.controller = controller;
+        super(controller);
     }
 
     @Override
     public void update() {
-        int deltaX = 0;
-        int deltaY = 0;
-
-        if (controller.isRequestingUp()){
-            deltaY--;
-        }
-
-        if (controller.isRequestingDown()){
-            deltaY++;
-        }
-
-        if (controller.isRequestingLeft()){
-            deltaX--;
-        }
-
-        if (controller.isRequestingRight()){
-            deltaX++;
-        }
-
-        position = new Position(position.getX() + deltaX, position.getY() + deltaY);
+        super.update();
     }
+
+
+
 
     @Override
     public Image getSprite() {

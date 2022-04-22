@@ -1,4 +1,4 @@
-package at.kaindorf.game.controller;
+package at.kaindorf.game_old.controller;
 
 public interface Controller {
 

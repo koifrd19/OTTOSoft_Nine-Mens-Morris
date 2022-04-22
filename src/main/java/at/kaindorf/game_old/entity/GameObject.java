@@ -1,9 +1,9 @@
-package at.kaindorf.game.entity;
+package at.kaindorf.game_old.entity;
 
 // Template for each game object if needed because there is just one the token
 
-import at.kaindorf.game.corehelper.Position;
-import at.kaindorf.game.corehelper.Size;
+import at.kaindorf.game_old.corehelper.Position;
+import at.kaindorf.game_old.corehelper.Size;
 
 import java.awt.*;
 
