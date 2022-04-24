@@ -24,6 +24,7 @@ public class Menu extends JFrame {
     }
 
     private void initComponents(){
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         ImageIcon background = new ImageIcon(this.getClass().getResource("/Abendmahl mit LB scaled.png"));
         JLabel backgroundLabel = new JLabel(background);
         backgroundLabel.setSize(1680, 945);
