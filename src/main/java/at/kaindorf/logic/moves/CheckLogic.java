@@ -1,5 +1,6 @@
 package at.kaindorf.logic.moves;
 
+import at.kaindorf.logic.beans.Mill;
 import at.kaindorf.logic.beans.Move;
 import at.kaindorf.logic.beans.Position;
 import at.kaindorf.logic.postitions.PositionData;
@@ -10,14 +11,14 @@ import java.util.*;
 public class CheckLogic {
     private final List<Position> positionList;
     private final Map<Integer, Set<Integer>> validMoves;
-    private Map<Integer, List<Position>> currentMills = new HashMap<>();
+    private Map<Integer, List<Mill>> currentMills = new HashMap<>();
 
     public CheckLogic() throws IOException {
         PositionData positionData = new PositionData();
         this.positionList = positionData.initializeList();
         this.validMoves = positionData.initializeMap();
-        currentMills.put(1,new ArrayList<Position>());
-        currentMills.put(2, new ArrayList<Position>());
+        currentMills.put(1,new ArrayList<>());
+        currentMills.put(2, new ArrayList<>());
     }
 
     public boolean isValidMove(Move move){
@@ -47,8 +48,12 @@ public class CheckLogic {
         for (Position position : positionList){
             if (position.getAvailable()==player) {nAvailablePositions.add(position);}
         }
-//        for (Position position : positionList){
-//        }
+//       remove the current mills to in order to avoid getting the same mill
+        for (Mill mill : currentMills.get(player)){
+           nAvailablePositions.remove(mill.getPos1());
+           nAvailablePositions.remove(mill.getPos2());
+           nAvailablePositions.remove(mill.getPos3());
+        }
 
 
 //      List to store the Objects, which were found
@@ -58,13 +63,13 @@ public class CheckLogic {
         if (foundObjects != null ){
             System.out.println("Horizontal Mill:");
             printMill(foundObjects);
-            currentMills.get(player).addAll(foundObjects);
+            currentMills.get(player).add(convToMill(foundObjects));
         }
         foundObjects = findXorYMills(nAvailablePositions, 'y');
         if (foundObjects != null) {
             System.out.println("Vertical Mill:");
             printMill(foundObjects);
-            currentMills.get(player).addAll(foundObjects);
+            currentMills.get(player).add(convToMill(foundObjects));
         }
         return false;
     }
@@ -164,6 +169,10 @@ public class CheckLogic {
         throw new Exception("no position");
     }
 
+    private Mill convToMill(List<Position> positions){
+        return new Mill(positions.get(0), positions.get(1), positions.get(2));
+    }
+
     private void printMill(List<Position> printList){
             System.out.println("Mill is formed on:");
             for (Position position : printList) {
@@ -178,18 +187,6 @@ public class CheckLogic {
 
 
     public static void main(String[] args) {
-        List<Position> positions = List.of(
-                new Position(1,1200,130),
-                new Position(2,1200,310),
-                new Position(5, 1200,490)
-        );
-        CheckLogic cl = null;
-        try {
-            cl = new CheckLogic();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println(cl.isALane(positions,'y'));
     }
 
 }

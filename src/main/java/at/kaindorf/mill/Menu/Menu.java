@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Menu extends JFrame {
+    private Clip clip;
     public static void main(String[] args) {
         new Menu().initComponents();
     }
@@ -58,13 +59,16 @@ public class Menu extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 new MillGame().getJFrame().show();
                 jFrame.dispose();
+                clip.stop();
             }});
     }
 
     private void playAudio() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        File file = new File("C:\\Users\\Allwinger\\OneDrive - HTBLA Kaindorf\\HTL\\3DHIF\\2022\\POS\\NineMensMorris\\src\\main\\resources\\audio.wav");
+        String path = System.getProperty("user.dir");
+        path +=  "\\src\\main\\resources\\audio.wav";
+        File file = new File(path);
         AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
-        Clip clip = AudioSystem.getClip();
+        clip = AudioSystem.getClip();
         clip.open(audioInputStream);
         clip.start();
     }
