@@ -3,9 +3,7 @@ package at.kaindorf.mill;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +13,7 @@ import java.util.LinkedList;
 
 public class MillGame {
 
-    private int x, y;
+    private int xBefore, yBefore, xAfter, yAfter;
     private LinkedList<Piece> pieceListPlayState = new LinkedList<>();
     private Piece selectedPiece = null;
     private JFrame jFrame = new JFrame("OttoSoft's Nine Men's morris");;
@@ -39,12 +37,20 @@ public class MillGame {
         return null;
     }
 
-    public int getX(){
-        return x;
+    public int getxBefore(){
+        return xBefore;
     }
 
-    public int getY(){
-        return y;
+    public int getyBefore(){
+        return yBefore;
+    }
+
+    public int getxAfter() {
+        return xAfter;
+    }
+
+    public int getyAfter() {
+        return yAfter;
     }
 
     public MillGame() {
@@ -52,25 +58,17 @@ public class MillGame {
     }
 
     private void runLauncher(){
-        jFrame.setBounds(26, 26, 1680, 945);
+        jFrame.setBounds(26, 26, 1680, 945); //1280/64 = 20 + 720/11
         jFrame.setLocationRelativeTo(null);
         jFrame.setResizable(false);
 
         //Initializes Icons
         this.setImage();
-
         // Create White Pieces
-
         this.createWhitePieces();
-
         // Create Black Pieces
-
         this.createBlackPieces();
-
-
         jFrame.setContentPane(renderJPanel());
-
-
         this.setMouseListeners();
 
 
@@ -138,19 +136,16 @@ public class MillGame {
     }
 
     private void setMouseListeners(){
-        jFrame.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-
-            }
+        jFrame.addMouseListener(new MouseAdapter() {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                // System.out.println(getPiece(e.getX(), e.getY()).isWhite ? "white " + getPice(e.getX(), e.getY()) : "black " + getPice(e.getX(), e.getY()));
                 selectedPiece = getPiece(e.getX(), e.getY());
 
-                x = e.getX();
-                y = e.getY();
+                xBefore = e.getX();
+                yBefore = e.getY();
+
+                System.out.println(xBefore + " " + yBefore);
             }
 
             @Override
@@ -158,21 +153,15 @@ public class MillGame {
                 if (selectedPiece != null) {
                     selectedPiece.move(e.getX() / 64, e.getY() / 64);
                     jFrame.repaint();
+                    xAfter = e.getX();
+                    yAfter = e.getY();
+                    System.out.println(xAfter + " " + yAfter);
                 }
             }
 
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
         });
 
-        jFrame.addMouseMotionListener(new MouseMotionListener() {
+        jFrame.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
                 if (selectedPiece != null){
@@ -182,10 +171,6 @@ public class MillGame {
                 }
             }
 
-            @Override
-            public void mouseMoved(MouseEvent e) {
-
-            }
         });
 
     }

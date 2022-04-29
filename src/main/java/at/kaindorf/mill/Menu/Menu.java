@@ -4,19 +4,11 @@ import at.kaindorf.mill.MillGame;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 
 public class Menu extends JFrame {
     private Clip clip;
@@ -54,6 +46,7 @@ public class Menu extends JFrame {
         jFrame.setLocationRelativeTo(null);
 
 
+        //dialog
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
