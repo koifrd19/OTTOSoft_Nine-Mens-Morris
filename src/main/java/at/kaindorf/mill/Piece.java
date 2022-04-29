@@ -8,6 +8,7 @@ public class Piece {
     int x;
     int y;
     boolean isWhite;
+    boolean isPlaced;
     LinkedList<Piece> ps;
     MillGame game;
 
@@ -26,7 +27,7 @@ public class Piece {
     public void move(int xp,int yp){
         if(game.getPiece(xp*64, yp*64)!=null){
             if(game.getPiece(xp*64, yp*64).isWhite!=isWhite){
-                game.getPiece(xp*64, yp*64);//.kill();
+                game.getPiece(xp*64, yp*64);
             }else{
                 x=this.xp*64;
                 y=this.yp*64;
@@ -38,7 +39,5 @@ public class Piece {
         x=xp*64 -22;
         y=yp*64 - 8;
     }
-    /*public void kill(){
-        ps.remove(this);
-    }*/
+
 }
