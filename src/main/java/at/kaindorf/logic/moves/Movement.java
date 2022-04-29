@@ -7,25 +7,22 @@ import java.io.IOException;
 import java.util.List;
 
 
-public class Movement {
-    private CheckLogic checkLogic = null;
-    private List<Position> positionList;
+public class Movement extends CheckLogic {
 
     public Movement() throws IOException {
-        checkLogic = new CheckLogic();
-        positionList = checkLogic.getPositionList();
+        super();
     }
 
     public void move(Position start, Position dest, int player) throws Exception {
-        start = checkLogic.whichPosition(start);
-        dest = checkLogic.whichPosition(dest);
+        start = whichPosition(start);
+        dest = whichPosition(dest);
         if (start.getAvailable() != player){
              throw new Exception("you are naughty ;) Don't take other player's tokens");
         }
-        if (checkLogic.isValidMove(new Move(start.getPosNR(), dest.getPosNR()))){
+        if (isValidMove(new Move(start.getPosNR(), dest.getPosNR()))){
             dest.setAvailable(start.getAvailable());
             start.setAvailable(0);
-            if (checkLogic.isMill(player)) {
+            if (isMill(player)) {
 
             }
             return;
@@ -34,18 +31,18 @@ public class Movement {
     }
 
     public void place(Position pos, int player) throws Exception {
-        pos = checkLogic.whichPosition(pos);
-        if (checkLogic.isValidPlace(pos)){
+        pos = whichPosition(pos);
+        if (isValidPlace(pos)){
             pos.setAvailable(player);
             System.out.println("Player "+player+" successfully placed token on " + pos );
-            checkLogic.isMill(player);
+            isMill(player);
             return;
         }
         throw new Exception("placing is not possible");
     }
 
     public void take(Position pos) throws Exception {
-        Position position = checkLogic.whichPosition(pos);
+        Position position = whichPosition(pos);
         positionList.get(positionList.indexOf(position)).setAvailable(0);
         System.out.println("Successfully taken token from " + position);
 
@@ -99,10 +96,6 @@ public class Movement {
 
         System.out.println("13 "+positionList.get(6).getAvailable()+"--------------"+positionList.get(5).getAvailable()
                 +"--------------"+positionList.get(4).getAvailable());
-    }
-
-    public CheckLogic getCheckLogic() {
-        return checkLogic;
     }
 
     public static void main(String[] args) {

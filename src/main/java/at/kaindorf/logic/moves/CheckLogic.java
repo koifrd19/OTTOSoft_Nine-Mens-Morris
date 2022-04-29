@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class CheckLogic {
-    private final List<Position> positionList;
+    protected final List<Position> positionList;
     private final Map<Integer, Set<Integer>> validMoves;
     private Map<Integer, List<Mill>> currentMills = new HashMap<>();
 
@@ -179,12 +179,6 @@ public class CheckLogic {
                 System.out.println(position);
             }
     }
-
-    public List<Position> getPositionList() {
-        return positionList;
-    }
-
-
 
     public static void main(String[] args) {
     }
