@@ -9,7 +9,7 @@ public class TestLogic {
 
 
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
 //        Position position = new Position(1377,492);
         Movement movement = null;
 //        Position position1= null;
@@ -55,10 +55,10 @@ public class TestLogic {
 
             try {
                 System.out.println("Player "+ ((i % 2)+1) +": give Coordinates of token to Select (X, Y): ");
-                startpos = movement.getCheckLogic().whichPosition(new Position(scanner.nextInt(), scanner.nextInt()));
+                startpos = movement.whichPosition(new Position(scanner.nextInt(), scanner.nextInt()));
                 System.out.println("now give Coordinates of destination to move token(X, Y):");
                 movement.move(startpos, new Position(scanner.nextInt(), scanner.nextInt()),(i % 2)+1);
-                movement.getCheckLogic().isMill((i % 2)+1);
+                movement.isMill((i % 2)+1);
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("Invalid Move! Try Again: ");
@@ -68,7 +68,7 @@ public class TestLogic {
         }
 
 
-    }
+    }*/
 
 
 

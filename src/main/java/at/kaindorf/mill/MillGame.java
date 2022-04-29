@@ -1,5 +1,9 @@
 package at.kaindorf.mill;
 
+import at.kaindorf.logic.beans.GamePiece;
+import at.kaindorf.logic.beans.Position;
+import at.kaindorf.logic.moves.Movement;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +17,10 @@ import java.util.LinkedList;
 
 public class MillGame {
 
+    private Movement movement;
+
     private int xBefore, yBefore, xAfter, yAfter;
+    private int currentPlayer= 1;
     private LinkedList<Piece> pieceListPlayState = new LinkedList<>();
     private Piece selectedPiece = null;
     private JFrame jFrame = new JFrame("OttoSoft's Nine Men's morris");;
@@ -53,11 +60,17 @@ public class MillGame {
         return yAfter;
     }
 
-    public MillGame() {
-        runLauncher();
-    }
+    public MillGame() {runLauncher();}
 
     private void runLauncher(){
+        System.out.println("runLauncher();");
+        try {
+            System.out.println("new Movement();");
+            movement = new Movement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         jFrame.setBounds(26, 26, 1680, 945); //1280/64 = 20 + 720/11
         jFrame.setLocationRelativeTo(null);
         jFrame.setResizable(false);
@@ -77,61 +90,61 @@ public class MillGame {
     }
 
     private void createBlackPieces() {
-        Piece black1 = new Piece(21,13,false, pieceListPlayState,this);
+        Piece black1 = new Piece(21,13, GamePiece.BLACK, pieceListPlayState,this);
         pieceListPlayState.add(black1);
 
-        Piece black2 = new Piece(21,11,false, pieceListPlayState,this);
+        Piece black2 = new Piece(21,11,GamePiece.BLACK, pieceListPlayState,this);
         pieceListPlayState.add(black2);
 
-        Piece black3 = new Piece(21,9,false, pieceListPlayState,this);
+        Piece black3 = new Piece(21,9,GamePiece.BLACK, pieceListPlayState,this);
         pieceListPlayState.add(black3);
 
-        Piece black4 = new Piece(23,13,false, pieceListPlayState,this);
+        Piece black4 = new Piece(23,13,GamePiece.BLACK, pieceListPlayState,this);
         pieceListPlayState.add(black4);
 
-        Piece black5 = new Piece(23,11,false, pieceListPlayState,this);
+        Piece black5 = new Piece(23,11,GamePiece.BLACK, pieceListPlayState,this);
         pieceListPlayState.add(black5);
 
-        Piece black6 = new Piece(23,9,false, pieceListPlayState,this);
+        Piece black6 = new Piece(23,9,GamePiece.BLACK, pieceListPlayState,this);
         pieceListPlayState.add(black6);
 
-        Piece black7 = new Piece(25,13,false, pieceListPlayState,this);
+        Piece black7 = new Piece(25,13,GamePiece.BLACK, pieceListPlayState,this);
         pieceListPlayState.add(black7);
 
-        Piece black8 = new  Piece(25,11,false, pieceListPlayState,this);
+        Piece black8 = new  Piece(25,11,GamePiece.BLACK, pieceListPlayState,this);
         pieceListPlayState.add(black8);
 
-        Piece black9 = new  Piece(25,9,false, pieceListPlayState,this);
+        Piece black9 = new  Piece(25,9,GamePiece.BLACK, pieceListPlayState,this);
         pieceListPlayState.add(black9);
     }
 
     private void createWhitePieces() {
 
-        Piece white1 = new Piece(1,1,true, pieceListPlayState, this);
+        Piece white1 = new Piece(1,1,GamePiece.WHITE, pieceListPlayState, this);
         pieceListPlayState.add(white1);
 
-        Piece white2 = new Piece(1,3,true, pieceListPlayState, this);
+        Piece white2 = new Piece(1,3,GamePiece.WHITE, pieceListPlayState, this);
         pieceListPlayState.add(white2);
 
-        Piece white3 = new Piece(1,5,true, pieceListPlayState, this);
+        Piece white3 = new Piece(1,5,GamePiece.WHITE, pieceListPlayState, this);
         pieceListPlayState.add(white3);
 
-        Piece white4 = new Piece(5,3,true, pieceListPlayState, this);
+        Piece white4 = new Piece(5,3,GamePiece.WHITE, pieceListPlayState, this);
         pieceListPlayState.add(white4);
 
-        Piece white5 = new Piece(5,1,true, pieceListPlayState, this);
+        Piece white5 = new Piece(5,1,GamePiece.WHITE, pieceListPlayState, this);
         pieceListPlayState.add(white5);
 
-        Piece white6 = new Piece(5,5,true, pieceListPlayState, this);
+        Piece white6 = new Piece(5,5,GamePiece.WHITE, pieceListPlayState, this);
         pieceListPlayState.add(white6);
 
-        Piece white7 = new Piece(3,5,true, pieceListPlayState, this);
+        Piece white7 = new Piece(3,5,GamePiece.WHITE, pieceListPlayState, this);
         pieceListPlayState.add(white7);
 
-        Piece white8 = new Piece(3,1,true, pieceListPlayState,this);
+        Piece white8 = new Piece(3,1,GamePiece.WHITE, pieceListPlayState,this);
         pieceListPlayState.add(white8);
 
-        Piece white9 = new Piece(3,3,true, pieceListPlayState,this);
+        Piece white9 = new Piece(3,3,GamePiece.WHITE, pieceListPlayState,this);
         pieceListPlayState.add(white9);
     }
 
@@ -141,21 +154,47 @@ public class MillGame {
             @Override
             public void mousePressed(MouseEvent e) {
                 selectedPiece = getPiece(e.getX(), e.getY());
+//                System.out.println("Coords: X:"+e.getX()+" Y: "+e.getY());
 
                 xBefore = e.getX();
                 yBefore = e.getY();
 
-                System.out.println(xBefore + " " + yBefore);
+                System.out.println("Pressed: " +xBefore + " " + yBefore);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
+                Position position;
+                System.out.println("Released: " +e.getX() + " " + e.getY());
                 if (selectedPiece != null) {
-                    selectedPiece.move(e.getX() / 64, e.getY() / 64);
+                    try {
+                        position = movement.whichPosition(new Position(e.getX(),e.getY()));
+                        if (movement.isValidPlace(position)) {
+                            movement.place(new Position(position.getXCoord(), position.getYCoord()), (currentPlayer % 2) + 1);
+                            movement.printGameField();
+                            selectedPiece.move(position.getXCoord() / 64, position.getYCoord() / 64);
+                            jFrame.repaint();
+                            xBefore = xAfter;
+
+                            xAfter = e.getX();
+                            yAfter = e.getY();
+
+                            System.out.println("Released: " +xAfter + " " + yAfter);
+                        }
+                        else{
+                            throw new Exception("no valid place");
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("moving back");
+                        selectedPiece.move(xBefore /64,yBefore/64);
+                        jFrame.repaint();
+                        ex.printStackTrace();
+                    }
+                }
+                else{
+                    System.out.println("moving back");
+                    selectedPiece.move(xBefore /64,yBefore/64);
                     jFrame.repaint();
-                    xAfter = e.getX();
-                    yAfter = e.getY();
-                    System.out.println(xAfter + " " + yAfter);
                 }
             }
 
@@ -203,7 +242,7 @@ public class MillGame {
 
                 for (Piece p:
                         pieceListPlayState) {
-                    if (p.isWhite){
+                    if (p.colour.getAvailable() == 1){
                         g2.drawImage(imageWhite, p.x, p.y, this);
                     }else
                         g2.drawImage(imageBlack, p.x, p.y, this);

@@ -31,10 +31,11 @@ public class CheckLogic {
 
     public boolean isValidPlace(Position pos){
 //        Checks if the field has a token on it
-//        if (pos.getAvailable()==0){
-//            return true;
-//        }
-        return pos.getAvailable() == 0;
+        if (pos.getAvailable()==0){
+            return true;
+        }
+        return false;
+//        return pos.getAvailable() == 0;
     }
 
     public boolean isMill(int player){
@@ -161,7 +162,7 @@ public class CheckLogic {
 //      the clicked field gets determined with a tolerance of 30 px
 //      in every direction
         for (Position position : positionList){
-            if (Math.abs(position.getYCoord()-pos.getYCoord()) <=30 && Math.abs(position.getXCoord()-pos.getXCoord())<=30){
+            if (Math.abs(position.getYCoord()-pos.getYCoord()) <=60 && Math.abs(position.getXCoord()-pos.getXCoord())<=60){
                 return position;
             }
         }

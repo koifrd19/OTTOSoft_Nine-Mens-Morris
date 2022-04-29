@@ -42,7 +42,7 @@ public class PositionData {
         List<Position> positons;
 
         // File path is passed as parameter
-        Path path = Paths.get(System.getProperty("user.dir"), "src", "main", "resources", "positions.txt");
+        Path path = Paths.get(System.getProperty("user.dir"), "src", "main", "resources", "positions_jFrame.txt");
 
         positons = Files.lines(path)
                 .skip(1)
