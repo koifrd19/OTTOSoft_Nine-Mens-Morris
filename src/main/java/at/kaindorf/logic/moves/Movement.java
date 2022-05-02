@@ -50,7 +50,7 @@ public class Movement extends CheckLogic {
 
     public void printGameField(){
 
-//        3--------------1--------------3
+//    3--------------1--------------3
 //    |              |              |
 //    |     4--------2--------4     |
 //    |     |        |        |     |

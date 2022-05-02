@@ -15,4 +15,8 @@ public enum GamePiece {
     public int getAvailable() {
         return available;
     }
+
+    public String getColour(int player){
+        return "";
+    }
 }

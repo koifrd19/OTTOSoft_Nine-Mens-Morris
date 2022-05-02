@@ -20,7 +20,7 @@ public class MillGame {
     private Movement movement;
 
     private int xBefore, yBefore, xAfter, yAfter;
-    private int currentPlayer= 1;
+    private int currentPlayer= 2;
     private LinkedList<Piece> pieceListPlayState = new LinkedList<>();
     private Piece selectedPiece = null;
     private JFrame jFrame = new JFrame("OttoSoft's Nine Men's morris");;
@@ -168,14 +168,18 @@ public class MillGame {
                 System.out.println("Released: " +e.getX() + " " + e.getY());
                 if (selectedPiece != null) {
                     try {
+                        if (selectedPiece.colour.getAvailable() != (currentPlayer % 2) + 1) {
+                            throw new Exception(selectedPiece.colour.getAvailable() +" should place a token" );
+                        }
                         position = movement.whichPosition(new Position(e.getX(),e.getY()));
                         if (movement.isValidPlace(position)) {
                             movement.place(new Position(position.getXCoord(), position.getYCoord()), (currentPlayer % 2) + 1);
+                            System.out.println(currentPlayer++);
                             movement.printGameField();
-                            selectedPiece.move(position.getXCoord() / 64, position.getYCoord() / 64);
+                            selectedPiece.move(position.getXCoord() /64, position.getYCoord() /64);
                             jFrame.repaint();
                             xBefore = xAfter;
-
+                            yBefore = yAfter;
                             xAfter = e.getX();
                             yAfter = e.getY();
 
@@ -190,11 +194,6 @@ public class MillGame {
                         jFrame.repaint();
                         ex.printStackTrace();
                     }
-                }
-                else{
-                    System.out.println("moving back");
-                    selectedPiece.move(xBefore /64,yBefore/64);
-                    jFrame.repaint();
                 }
             }
 

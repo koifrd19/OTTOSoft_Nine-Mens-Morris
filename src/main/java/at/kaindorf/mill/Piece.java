@@ -26,19 +26,19 @@ public class Piece {
     }
 
     public void move(int xp,int yp){
-        if(game.getPiece(xp*64, yp*64)!=null){
-            if(game.getPiece(xp*64, yp*64).colour!=colour){
-                game.getPiece(xp*64, yp*64);
-            }else{
-                x=this.xp*64;
-                y=this.yp*64;
-                return;
-            }
+        if(game.getPiece(xp * 64, yp * 64)!=null){
+            //if(game.getPiece(xp64, yp64).colour!=colour){
+            game.getPiece(xp * 64, yp * 64);
+            //}else{
+            x=this.xp * 64 - 22;
+            y=this.yp * 64 - 8;
+            return;
+            //}
         }
         this.xp=xp;
         this.yp=yp;
-        x=xp*64 -22;
-        y=yp*64 - 8;
+        x=xp * 64 -22;
+        y=yp * 64 - 8;
     }
 
 }
