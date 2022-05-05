@@ -1,4 +1,4 @@
-package at.kaindorf.logic.beans;
+package at.kaindorf.mill.beans;
 
 public class Position {
 

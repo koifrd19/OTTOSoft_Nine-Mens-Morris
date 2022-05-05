@@ -1,6 +1,4 @@
-package at.kaindorf.mill.Menu;
-
-import at.kaindorf.mill.MillGame;
+package at.kaindorf.mill.gui.menu;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
@@ -10,15 +8,18 @@ import java.io.File;
 import java.io.IOException;
 
 
-public class Menu extends JFrame {
+public class MenuDlg extends JDialog {
     private Clip clip;
-    public static void main(String[] args) {
-        new Menu().initComponents();
+
+    public MenuDlg(JFrame game, boolean modal) {
+        super(game, modal);
+        initComponents();
+        setLocationRelativeTo(game);
     }
 
     private void initComponents(){
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
         ImageIcon background = new ImageIcon(this.getClass().getResource("/Abendmahl mit LB scaled.png"));
+        ImageIcon buttonImage = new ImageIcon(this.getClass().getResource("/holzplanke.png"));
         JLabel backgroundLabel = new JLabel(background);
         backgroundLabel.setSize(1680, 945);
 
@@ -32,27 +33,21 @@ public class Menu extends JFrame {
             e.printStackTrace();
         }
 
-        JButton button = new JButton("Start Game");
-        button.setBounds(760, 550, 140, 50);
+        JButton button = new JButton(buttonImage);
+        button.setBounds(610, 250, 450, 74);
+        button.setBorder(null);
         backgroundLabel.add(button);
 
-
-            JFrame jFrame = new JFrame();
-        //jFrame.setLayout(new GridLayout(1, 3));
-        jFrame.add(backgroundLabel);
-        jFrame.setVisible(true);
-        jFrame.setDefaultCloseOperation(3);
-        jFrame.setSize(1680, 945);
-        jFrame.setLocationRelativeTo(null);
+        this.add(backgroundLabel);
+        this.setSize(1680, 945);
+        this.setTitle("OttoSoft's Nine Men's morris");
 
 
-        //dialog
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new MillGame().getJFrame().show();
-                jFrame.dispose();
-                clip.stop();
+                clip.close();
+                dispose();
             }});
     }
 

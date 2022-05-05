@@ -1,9 +1,9 @@
-package at.kaindorf.logic.moves;
+package at.kaindorf.mill.bl.moves;
 
-import at.kaindorf.logic.beans.Mill;
-import at.kaindorf.logic.beans.Move;
-import at.kaindorf.logic.beans.Position;
-import at.kaindorf.logic.postitions.PositionData;
+import at.kaindorf.mill.beans.Mill;
+import at.kaindorf.mill.beans.Move;
+import at.kaindorf.mill.beans.Position;
+import at.kaindorf.mill.io_helper.postitions.PositionData;
 
 import java.io.IOException;
 import java.util.*;

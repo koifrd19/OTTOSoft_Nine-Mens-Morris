@@ -1,6 +1,6 @@
-package at.kaindorf.logic.beans;
+package at.kaindorf.mill.beans;
 
-public enum GamePiece {
+public enum GamePieceState {
 
 
     WHITE(1), BLACK(2), EMPTY(0);
@@ -8,7 +8,7 @@ public enum GamePiece {
     private final int available;
 
 
-    GamePiece(int available) {
+    GamePieceState(int available) {
         this.available = available;
     }
 

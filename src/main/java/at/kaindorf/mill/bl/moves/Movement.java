@@ -1,10 +1,9 @@
-package at.kaindorf.logic.moves;
+package at.kaindorf.mill.bl.moves;
 
-import at.kaindorf.logic.beans.Move;
-import at.kaindorf.logic.beans.Position;
+import at.kaindorf.mill.beans.Move;
+import at.kaindorf.mill.beans.Position;
 
 import java.io.IOException;
-import java.util.List;
 
 
 public class Movement extends CheckLogic {

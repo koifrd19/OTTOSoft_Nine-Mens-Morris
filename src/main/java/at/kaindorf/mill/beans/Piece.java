@@ -1,19 +1,21 @@
-package at.kaindorf.mill;
+package at.kaindorf.mill.beans;
 
-import at.kaindorf.logic.beans.GamePiece;
+import at.kaindorf.mill.gui.MainField;
+import lombok.Data;
 
 import java.util.LinkedList;
 
+@Data
 public class Piece {
-    int xp;
-    int yp;
-    int x;
-    int y;
-    GamePiece colour;
-    LinkedList<Piece> ps;
-    MillGame game;
+    private int xp;
+    private int yp;
+    private int x;
+    private int y;
+    private GamePieceState colour;
+    private LinkedList<Piece> ps;
+    private MainField game;
 
-    public Piece(int xp, int yp, GamePiece colour, LinkedList<Piece> ps, MillGame game) {
+    public Piece(int xp, int yp, GamePieceState colour, LinkedList<Piece> ps, MainField game) {
         this.xp = xp;
         this.yp = yp;
         x=xp*64 -22;

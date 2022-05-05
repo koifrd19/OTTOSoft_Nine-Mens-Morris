@@ -1,9 +1,4 @@
-package at.kaindorf.logic.test;
-
-import at.kaindorf.logic.beans.Position;
-import at.kaindorf.logic.moves.Movement;
-
-import java.util.Scanner;
+package at.kaindorf.mill.test;
 
 public class TestLogic {
 

@@ -1,6 +1,6 @@
-package at.kaindorf.logic.postitions;
+package at.kaindorf.mill.io_helper.postitions;
 
-import at.kaindorf.logic.beans.Position;
+import at.kaindorf.mill.beans.Position;
 
 import java.io.*;
 import java.nio.file.Files;
