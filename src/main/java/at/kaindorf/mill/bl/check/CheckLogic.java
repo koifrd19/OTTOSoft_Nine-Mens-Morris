@@ -1,4 +1,4 @@
-package at.kaindorf.mill.bl.moves;
+package at.kaindorf.mill.bl.check;
 
 import at.kaindorf.mill.beans.Mill;
 import at.kaindorf.mill.beans.Move;
@@ -62,13 +62,13 @@ public class CheckLogic {
 //      thousands of for-loops :)
         List<Position> foundObjects = findXorYMills(nAvailablePositions,'x');
         if (foundObjects != null ){
-            System.out.println("Horizontal Mill:");
+            System.out.println("Horizontal Mill");
             printMill(foundObjects);
             currentMills.get(player).add(convToMill(foundObjects));
         }
         foundObjects = findXorYMills(nAvailablePositions, 'y');
         if (foundObjects != null) {
-            System.out.println("Vertical Mill:");
+            System.out.println("Vertical Mill");
             printMill(foundObjects);
             currentMills.get(player).add(convToMill(foundObjects));
         }
@@ -175,7 +175,7 @@ public class CheckLogic {
     }
 
     private void printMill(List<Position> printList){
-            System.out.println("Mill is formed on:");
+            System.out.println("is formed on:");
             for (Position position : printList) {
                 System.out.println(position);
             }

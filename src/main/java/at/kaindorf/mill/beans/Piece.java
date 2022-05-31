@@ -1,21 +1,25 @@
 package at.kaindorf.mill.beans;
 
-import at.kaindorf.mill.gui.MainField;
+import at.kaindorf.mill.gui.game.MainField;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.LinkedList;
 
-@Data
+@Getter
+@Setter
 public class Piece {
     private int xp;
     private int yp;
-    private int x;
-    private int y;
-    private GamePieceState colour;
+    public int x;
+    public int y;
+    public GamePieceColour colour;
     private LinkedList<Piece> ps;
     private MainField game;
 
-    public Piece(int xp, int yp, GamePieceState colour, LinkedList<Piece> ps, MainField game) {
+    public Piece(int xp, int yp, GamePieceColour colour, LinkedList<Piece> ps, MainField game) {
         this.xp = xp;
         this.yp = yp;
         x=xp*64 -22;
@@ -43,4 +47,16 @@ public class Piece {
         y=yp * 64 - 8;
     }
 
+    @Override
+    public String toString() {
+        return "Piece{" +
+                "xp=" + xp +
+                ", yp=" + yp +
+                ", x=" + x +
+                ", y=" + y +
+                ", colour=" + colour +
+                ", ps=" + ps +
+                ", game=" + game +
+                '}';
+    }
 }

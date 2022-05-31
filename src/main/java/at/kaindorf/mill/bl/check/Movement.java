@@ -1,4 +1,4 @@
-package at.kaindorf.mill.bl.moves;
+package at.kaindorf.mill.bl.check;
 
 import at.kaindorf.mill.beans.Move;
 import at.kaindorf.mill.beans.Position;

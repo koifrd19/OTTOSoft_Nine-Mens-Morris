@@ -10,6 +10,7 @@
         <module name="game" />
         <module name="OTTOSoft_Nine-Mens-Morris" />
         <module name="NineMensMorris" />
+        <module name="OTTOSoft_Nine-Mens-Morris_Sprint2_2" />
       </profile>
     </annotationProcessing>
   </component>

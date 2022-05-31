@@ -1,6 +1,6 @@
 package at.kaindorf.mill.beans;
 
-public enum GamePieceState {
+public enum GamePieceColour {
 
 
     WHITE(1), BLACK(2), EMPTY(0);
@@ -8,7 +8,7 @@ public enum GamePieceState {
     private final int available;
 
 
-    GamePieceState(int available) {
+    GamePieceColour(int available) {
         this.available = available;
     }
 
