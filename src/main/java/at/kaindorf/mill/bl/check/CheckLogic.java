@@ -3,8 +3,10 @@ package at.kaindorf.mill.bl.check;
 import at.kaindorf.mill.beans.Mill;
 import at.kaindorf.mill.beans.Move;
 import at.kaindorf.mill.beans.Position;
+import at.kaindorf.mill.gui.game.MainField;
 import at.kaindorf.mill.io_helper.postitions.PositionData;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
 
@@ -27,6 +29,10 @@ public class CheckLogic {
 //            return true;
 //        }
         return validMoves.get(move.getStart()).contains(move.getDestination());
+    }
+
+    public boolean isValidJump(Move move){
+        return positionList.indexOf(move.getDestination()) == 0;
     }
 
     public boolean isValidPlace(Position pos){
@@ -61,21 +67,12 @@ public class CheckLogic {
 //      Second (der beschissene Part): Find all mills with
 //      thousands of for-loops :)
         List<Position> foundObjects = findXorYMills(nAvailablePositions,'x');
-        if (foundObjects != null ){
-            System.out.println("Horizontal Mill");
-            printMill(foundObjects);
-            if (!currentMills.get(player).contains(convToMill(foundObjects))){
-                currentMills.get(player).add(convToMill(foundObjects));}
-        }
+        manageCurrentMills(foundObjects, 'x', player);
+
         foundObjects = findXorYMills(nAvailablePositions, 'y');
-        if (foundObjects != null) {
-            System.out.println("Vertical Mill");
-            printMill(foundObjects);
-            if (!currentMills.get(player).contains(convToMill(foundObjects))){
-            currentMills.get(player).add(convToMill(foundObjects));}
-        }
-//
-        return false;
+        manageCurrentMills(foundObjects, 'y', player);
+
+        return MainField.isTaking();
     }
 
 //  Method to find vertical or horizontal mills
@@ -160,6 +157,22 @@ public class CheckLogic {
         else return false;
     }
 
+    private void manageCurrentMills(List<Position> foundObjects, char xy, int player){
+        if(foundObjects != null) {
+            for (Mill mill : currentMills.get(player)) {
+                if(convToMill(foundObjects).equals(mill)){
+//                    If the found Object equals a current Mill, the Mill is already formed
+                    return;
+                }
+            }
+            System.out.println(xy+"-axe Mill");
+            printMill(foundObjects);
+            currentMills.get(player).add(convToMill(foundObjects));
+            JOptionPane.showMessageDialog(null, "Please take a Stone!", "Mill is formed by Player " + player, JOptionPane.INFORMATION_MESSAGE);
+            MainField.setTaking(true);
+        }
+    }
+
 //    Function to delete split Mills out of currentMills Map
     public void deleteSplitMills(int player){
         List<Mill> millList = new ArrayList<>(currentMills.get(player));
@@ -203,6 +216,16 @@ public class CheckLogic {
         }
 
         throw new Exception("no position");
+    }
+
+    public int getNoOfPlacedTokens(int player){
+        int count = 0;
+        for (Position position : positionList){
+            if (position.getAvailable() == player){
+                count++;
+            }
+        }
+        return count;
     }
 
     private Mill convToMill(List<Position> positions){

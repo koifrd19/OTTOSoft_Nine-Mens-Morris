@@ -28,12 +28,14 @@ public class MainField extends JFrame{
     private int xBefore, yBefore, xAfter, yAfter;
     private int currentPlayer = 0;
     private LinkedList<Piece> pieceListPlayState = new LinkedList<>();
+    private LinkedList<Piece> pieceListPlaced = new LinkedList<>();
     private Piece selectedPiece = null;
     private JFrame jFrame = new JFrame("OttoSoft's Nine Men's morris");;
     private Image imageWhite = null;
     private Image imageBlack = null;
     private Image img = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/nussbaum_background.png"));
 
+    private static boolean taking = false;
     public Piece getPiece(int x, int y){
         int xp = x/64;
         int yp = y/64;
@@ -149,22 +151,37 @@ public class MainField extends JFrame{
                 xBefore = e.getX();
                 yBefore = e.getY();
 
-                System.out.println("Pressed: " +xBefore + " " + yBefore);
+                System.out.println("Pressed: " +xBefore + " " + yBefore +" taking: " + taking);
+//                if (taking){
+//                    taking(e);
+//                }
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 Position position;
                 System.out.println("Released: " +e.getX() + " " + e.getY());
-                if (selectedPiece != null) {
-                    if (currentPlayer <= 8){
+                if (taking && selectedPiece!=null){
+//                    System.out.println("taking");
+                    taking(e);
+                    taking = false;
+                }
+                else if (selectedPiece != null) {
+                    if (currentPlayer <= 5){
                         placing(e);
+                    }
+                    else if(currentPlayer == 6){
+                        JOptionPane.showMessageDialog(null, "Now get Moving !",
+                                "Placing is over", JOptionPane.INFORMATION_MESSAGE);
+
+                        System.out.println("moving!");
+                        moving(e);
+                        currentPlayer++;
                     }
                     else{
                         System.out.println("moving!");
                         moving(e);
                     }
-
                 }
             }
 
@@ -193,10 +210,10 @@ public class MainField extends JFrame{
                 throw new Exception(selectedPiece.colour.getAvailable() +" should place a token" );
             }
             position = movement.whichPosition(new Position(e.getX(),e.getY()));
-            if (movement.isValidPlace(position)) {
+            if (movement.isValidPlace(position) && !pieceListPlaced.contains(selectedPiece)) {
 
                 movement.place(new Position(position.getXCoord(), position.getYCoord()), (currentPlayer % 2) + 1);
-
+                pieceListPlaced.add(selectedPiece);
                 System.out.println(currentPlayer++);
                 movement.printGameField();
 
@@ -213,7 +230,7 @@ public class MainField extends JFrame{
                 System.out.println("Released: " +xAfter + " " + yAfter);
             }
             else{
-                throw new Exception("no valid place");
+                throw new Exception("no valid place or piece already placed");
             }
         } catch (Exception ex) {
             System.out.println("moving back");
@@ -228,68 +245,80 @@ public class MainField extends JFrame{
 
         Move move;
         Position start, destination;
-        try {
-            if (selectedPiece.colour.getAvailable() != (currentPlayer % 2) + 1) {
-                throw new Exception(selectedPiece.colour.getAvailable() + " should move a token"); }
+            try {
+                if (selectedPiece.colour.getAvailable() != (currentPlayer % 2) + 1) {
+                    throw new Exception(selectedPiece.colour.getAvailable() + " should move a token");
+                }
 
-            destination = movement.whichPosition(new Position( e.getX(),e.getY()));
-            start = movement.whichPosition(new Position(xBefore,yBefore));
+                destination = movement.whichPosition(new Position(e.getX(), e.getY()));
+                start = movement.whichPosition(new Position(xBefore, yBefore));
 
-            move = new Move(start.getPosNR(), destination.getPosNR());
+                move = new Move(start.getPosNR(), destination.getPosNR());
 
-            if (movement.isValidMove(move)) {
+                if (movement.isValidMove(move)) {
 
-                movement.move(start,destination,(currentPlayer % 2) + 1);
+                    movement.move(start, destination, (currentPlayer % 2) + 1);
 
-                System.out.println("Player: " +currentPlayer++);
+                    System.out.println("Player: " + currentPlayer++);
 
-                movement.printGameField();
+                    movement.printGameField();
 
-                selectedPiece.move(destination.getXCoord() /64, destination.getYCoord() /64);
+                    selectedPiece.move(destination.getXCoord() / 64, destination.getYCoord() / 64);
+                    jFrame.repaint();
+
+                    xBefore = xAfter;
+                    yBefore = yAfter;
+
+                    xAfter = e.getX();
+                    yAfter = e.getY();
+
+                    System.out.println("Released: " + xAfter + " " + yAfter);
+                } else {
+                    throw new Exception("no valid move! start: " + start.getPosNR() + " destination: " + destination.getPosNR());
+                }
+            } catch (Exception ex) {
+                System.out.println("moving back");
+                selectedPiece.move(xBefore / 64, yBefore / 64);
                 jFrame.repaint();
-
-                xBefore = xAfter;
-                yBefore = yAfter;
-
-                xAfter = e.getX();
-                yAfter = e.getY();
-
-                System.out.println("Released: " +xAfter + " " + yAfter);
+                ex.printStackTrace();
             }
-            else{
-                throw new Exception("no valid move! start: " + start.getPosNR() + " destination: " +destination.getPosNR());
-            }
-        } catch (Exception ex) {
-            System.out.println("moving back");
-            selectedPiece.move(xBefore /64,yBefore/64);
-            jFrame.repaint();
-            ex.printStackTrace();
-        }
+//        }
     }
 
     private void taking(MouseEvent e){
-        System.out.println("taking");
+//        System.out.println("taking");
         try {
-            Position position = new Position(selectedPiece.x, selectedPiece.y);
+//            System.out.println("TRY:");
+            Position position = new Position(selectedPiece.getX(), selectedPiece.getY());
+//            System.out.println("1");
             Random rand = new Random();
+//            System.out.println("2");
             int i = selectedPiece.colour.getAvailable();
-            if (i != (currentPlayer % 2) + 1){
+//            System.out.println("3 Player: " + i);
+            if (i != currentPlayer){
                 System.out.println("taking");
-                movement.take(movement.whichPosition(position));
+                System.out.println("Position Object of selected Piece: "+ position.toString());
+                movement.take(movement.whichPosition(new Position(e.getX(),e.getY())));
                 position.setAvailable(0);
                 selectedPiece.move(rand.nextInt( 1350)+1620, rand.nextInt(110)+320);
+                jFrame.repaint();
+                movement.printGameField();
             }
-
-
-
         } catch (Exception ex) {
+            ex.printStackTrace();
             xBefore = e.getX();
             yBefore = e.getY();
-
-            System.out.println("Pressed: " +xBefore + " " + yBefore);
-            ex.printStackTrace();
+            System.out.println("Taking pressed: " +xBefore + " " + yBefore);
         }
 
+    }
+
+    public static void setTaking(boolean taking) {
+        MainField.taking = taking;
+    }
+
+    public static boolean isTaking() {
+        return taking;
     }
 
     private void setImage(){
