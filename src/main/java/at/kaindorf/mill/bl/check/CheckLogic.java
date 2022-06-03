@@ -17,8 +17,8 @@ public class CheckLogic {
         PositionData positionData = new PositionData();
         this.positionList = positionData.initializeList();
         this.validMoves = positionData.initializeMap();
-        currentMills.put(1,new ArrayList<>());
-        currentMills.put(2, new ArrayList<>());
+        currentMills.put(1,new ArrayList<Mill>());
+        currentMills.put(2, new ArrayList<Mill>());
     }
 
     public boolean isValidMove(Move move){
@@ -50,11 +50,11 @@ public class CheckLogic {
             if (position.getAvailable()==player) {nAvailablePositions.add(position);}
         }
 //       remove the current mills to in order to avoid getting the same mill
-        for (Mill mill : currentMills.get(player)){
+        /*for (Mill mill : currentMills.get(player)){
            nAvailablePositions.remove(mill.getPos1());
            nAvailablePositions.remove(mill.getPos2());
            nAvailablePositions.remove(mill.getPos3());
-        }
+        }*/
 
 
 //      List to store the Objects, which were found
@@ -64,14 +64,17 @@ public class CheckLogic {
         if (foundObjects != null ){
             System.out.println("Horizontal Mill");
             printMill(foundObjects);
-            currentMills.get(player).add(convToMill(foundObjects));
+            if (!currentMills.get(player).contains(convToMill(foundObjects))){
+                currentMills.get(player).add(convToMill(foundObjects));}
         }
         foundObjects = findXorYMills(nAvailablePositions, 'y');
         if (foundObjects != null) {
             System.out.println("Vertical Mill");
             printMill(foundObjects);
-            currentMills.get(player).add(convToMill(foundObjects));
+            if (!currentMills.get(player).contains(convToMill(foundObjects))){
+            currentMills.get(player).add(convToMill(foundObjects));}
         }
+//
         return false;
     }
 
@@ -156,6 +159,38 @@ public class CheckLogic {
         else if (half2.size() == 3) return true;
         else return false;
     }
+
+//    Function to delete split Mills out of currentMills Map
+    public void deleteSplitMills(int player){
+        List<Mill> millList = new ArrayList<>(currentMills.get(player));
+        List<Mill> deleteMills = new ArrayList<>();
+        System.out.println(player+ "'s current Mills: ");
+        for (Mill mill : millList){
+            System.out.println(mill.toString());
+        }
+
+        for (Mill mill : millList){
+//            We ensure that every Mill is sill formed, if not it gets removed out of the current mills
+//            With get Available we get the player that possesses the token
+            if ( positionList.get(positionList.indexOf(mill.getPos1())).getAvailable()
+                        == positionList.get(positionList.indexOf(mill.getPos2())).getAvailable()
+                && positionList.get(positionList.indexOf(mill.getPos2())).getAvailable()
+                        == positionList.get(positionList.indexOf(mill.getPos3())).getAvailable()
+                && positionList.get(positionList.indexOf(mill.getPos3())).getAvailable()
+                    == player){}
+            else{
+                deleteMills.add(mill);
+            }
+
+        }
+        System.out.println(player+ "'s removed Mill: ");
+        for (Mill mill : deleteMills){
+            System.out.println(mill.toString());
+        }
+        millList.removeAll(deleteMills);
+        currentMills.put(player, millList);
+    }
+
 
     public Position whichPosition(Position pos) throws Exception {
 //      Based on a Position Object(int x, int y),

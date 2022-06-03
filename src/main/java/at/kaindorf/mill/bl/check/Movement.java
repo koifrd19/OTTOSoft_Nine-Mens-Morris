@@ -24,6 +24,7 @@ public class Movement extends CheckLogic {
             if (isMill(player)) {
 
             }
+            deleteSplitMills(player);
             return;
         }
         throw new Exception("moving is not possible");
@@ -35,6 +36,7 @@ public class Movement extends CheckLogic {
             pos.setAvailable(player);
             System.out.println("Player "+player+" successfully placed token on " + pos );
             isMill(player);
+            deleteSplitMills(player);
             return;
         }
         throw new Exception("placing is not possible");

@@ -157,7 +157,7 @@ public class MainField extends JFrame{
                 Position position;
                 System.out.println("Released: " +e.getX() + " " + e.getY());
                 if (selectedPiece != null) {
-                    if (currentPlayer <= 5){
+                    if (currentPlayer <= 8){
                         placing(e);
                     }
                     else{
