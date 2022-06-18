@@ -30,16 +30,29 @@ public class Movement extends CheckLogic {
         throw new Exception("moving is not possible");
     }
 
-    public void place(Position pos, int player) throws Exception {
-        pos = whichPosition(pos);
-        if (isValidPlace(pos)){
-            pos.setAvailable(player);
-            System.out.println("Player "+player+" successfully placed token on " + pos );
+    public void place(Position position, int player) throws Exception {
+        position = whichPosition(position);
+        if (isValidPlace(position)){
+            position.setAvailable(player);
+            System.out.println("Player "+player+" successfully placed token on " + position );
             isMill(player);
             deleteSplitMills(player);
             return;
         }
         throw new Exception("placing is not possible");
+    }
+
+    public void jump(Position start, Position dest, int player) throws Exception {
+        dest = whichPosition(dest);
+        start = whichPosition(start);
+        if (start.getAvailable() == player) {
+            dest.setAvailable(start.getAvailable());
+            start.setAvailable(0);
+            isMill(player);
+            deleteSplitMills(player);
+            return;
+        }
+        throw new Exception("jumping is not possible");
     }
 
     public void take(Position pos) throws Exception {
