@@ -300,6 +300,7 @@ public class MainField extends JFrame{
     }
 
     private void taking(MouseEvent e){
+        Random random = new Random();
 //        System.out.println("taking");
         try {
 //            System.out.println("TRY:");
@@ -317,10 +318,15 @@ public class MainField extends JFrame{
                 position.setAvailable(0);
                 takenPiece.add(selectedPiece);
 
+                // max value: x: 325; y: 825
+                // min value: x: 30; y: 525
+                // max value: x: 1550; y: 350
+                // min value: x: 1300; y: 50
+
                 if (selectedPiece.getColour() == GamePieceColour.WHITE){
-                    selectedPiece.move(3, 10);
+                    selectedPiece.moveToCoordinate(random.nextInt(325 - 30) + 30 , random.nextInt(825 - 525) + 525);
                 }else {
-                    selectedPiece.move(23, 2);
+                    selectedPiece.moveToCoordinate(random.nextInt(1550 - 1300) + 1300 , random.nextInt(350 - 50) + 50);
                 }
 
                 pieceSet.remove(selectedPiece);
