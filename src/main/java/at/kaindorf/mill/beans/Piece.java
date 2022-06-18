@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.LinkedList;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -16,10 +17,10 @@ public class Piece {
     public int x;
     public int y;
     public GamePieceColour colour;
-    private LinkedList<Piece> ps;
+    private Set<Piece> ps;
     private MainField game;
 
-    public Piece(int xp, int yp, GamePieceColour colour, LinkedList<Piece> ps, MainField game) {
+    public Piece(int xp, int yp, GamePieceColour colour, Set<Piece> ps, MainField game) {
         this.xp = xp;
         this.yp = yp;
         x=xp*64 -22;

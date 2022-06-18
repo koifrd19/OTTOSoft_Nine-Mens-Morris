@@ -7,6 +7,7 @@ import at.kaindorf.mill.beans.Position;
 import at.kaindorf.mill.bl.check.Movement;
 import at.kaindorf.mill.gui.menu.MenuDlg;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -17,9 +18,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.LinkedList;
-import java.util.Random;
+import java.util.*;
 
+
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class MainField extends JFrame{
 
@@ -27,10 +29,13 @@ public class MainField extends JFrame{
 
     private int xBefore, yBefore, xAfter, yAfter;
     private int currentPlayer = 0;
-    private LinkedList<Piece> pieceListPlayState = new LinkedList<>();
-    private LinkedList<Piece> pieceListPlaced = new LinkedList<>();
+    private int whitePieceCnt, blackPieceCnt;
+    private boolean isTrue = false;
+    private Set<Piece> pieceSet = new HashSet<>();
+    private Set<Piece> pieceListPlaced = new HashSet<>();
+    private Set<Piece> takenPiece = new HashSet<>();
     private Piece selectedPiece = null;
-    private JFrame jFrame = new JFrame("OttoSoft's Nine Men's morris");;
+    private JFrame jFrame = new JFrame("OttoSoft's Nine Men's morris");
     private Image imageWhite = null;
     private Image imageBlack = null;
     private Image img = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/nussbaum_background.png"));
@@ -40,7 +45,7 @@ public class MainField extends JFrame{
         int xp = x/64;
         int yp = y/64;
 
-        for (Piece p : pieceListPlayState){
+        for (Piece p : pieceSet){
             if (p.getXp() == xp && p.getYp() == yp){
                 return p;
             }
@@ -54,6 +59,8 @@ public class MainField extends JFrame{
         menuDlg.setVisible(true);
         runLauncher();
     }
+
+
 
     public void runLauncher(){
         System.out.println("runLauncher();");
@@ -82,62 +89,62 @@ public class MainField extends JFrame{
     }
 
     private void createBlackPieces() {
-        Piece black1 = new Piece(21,13, GamePieceColour.BLACK, pieceListPlayState,this);
-        pieceListPlayState.add(black1);
+        Piece black1 = new Piece(21,13, GamePieceColour.BLACK, pieceSet,this);
+        pieceSet.add(black1);
 
-        Piece black2 = new Piece(21,11, GamePieceColour.BLACK, pieceListPlayState,this);
-        pieceListPlayState.add(black2);
+        Piece black2 = new Piece(21,11, GamePieceColour.BLACK, pieceSet,this);
+        pieceSet.add(black2);
 
-        Piece black3 = new Piece(21,9, GamePieceColour.BLACK, pieceListPlayState,this);
-        pieceListPlayState.add(black3);
+        Piece black3 = new Piece(21,9, GamePieceColour.BLACK, pieceSet,this);
+        pieceSet.add(black3);
 
-        Piece black4 = new Piece(23,13, GamePieceColour.BLACK, pieceListPlayState,this);
-        pieceListPlayState.add(black4);
+        Piece black4 = new Piece(23,13, GamePieceColour.BLACK, pieceSet,this);
+        pieceSet.add(black4);
 
-        Piece black5 = new Piece(23,11, GamePieceColour.BLACK, pieceListPlayState,this);
-        pieceListPlayState.add(black5);
+        Piece black5 = new Piece(23,11, GamePieceColour.BLACK, pieceSet,this);
+        pieceSet.add(black5);
 
-        Piece black6 = new Piece(23,9, GamePieceColour.BLACK, pieceListPlayState,this);
-        pieceListPlayState.add(black6);
+        Piece black6 = new Piece(23,9, GamePieceColour.BLACK, pieceSet,this);
+        pieceSet.add(black6);
 
-        Piece black7 = new Piece(25,13, GamePieceColour.BLACK, pieceListPlayState,this);
-        pieceListPlayState.add(black7);
+        Piece black7 = new Piece(25,13, GamePieceColour.BLACK, pieceSet,this);
+        pieceSet.add(black7);
 
-        Piece black8 = new  Piece(25,11, GamePieceColour.BLACK, pieceListPlayState,this);
-        pieceListPlayState.add(black8);
+        Piece black8 = new  Piece(25,11, GamePieceColour.BLACK, pieceSet,this);
+        pieceSet.add(black8);
 
-        Piece black9 = new  Piece(25,9, GamePieceColour.BLACK, pieceListPlayState,this);
-        pieceListPlayState.add(black9);
+        Piece black9 = new  Piece(25,9, GamePieceColour.BLACK, pieceSet,this);
+        pieceSet.add(black9);
     }
 
     private void createWhitePieces() {
 
-        Piece white1 = new Piece(1,1, GamePieceColour.WHITE, pieceListPlayState, this);
-        pieceListPlayState.add(white1);
+        Piece white1 = new Piece(1,1, GamePieceColour.WHITE, pieceSet, this);
+        pieceSet.add(white1);
 
-        Piece white2 = new Piece(1,3, GamePieceColour.WHITE, pieceListPlayState, this);
-        pieceListPlayState.add(white2);
+        Piece white2 = new Piece(1,3, GamePieceColour.WHITE, pieceSet, this);
+        pieceSet.add(white2);
 
-        Piece white3 = new Piece(1,5, GamePieceColour.WHITE, pieceListPlayState, this);
-        pieceListPlayState.add(white3);
+        Piece white3 = new Piece(1,5, GamePieceColour.WHITE, pieceSet, this);
+        pieceSet.add(white3);
 
-        Piece white4 = new Piece(5,3, GamePieceColour.WHITE, pieceListPlayState, this);
-        pieceListPlayState.add(white4);
+        Piece white4 = new Piece(5,3, GamePieceColour.WHITE, pieceSet, this);
+        pieceSet.add(white4);
 
-        Piece white5 = new Piece(5,1, GamePieceColour.WHITE, pieceListPlayState, this);
-        pieceListPlayState.add(white5);
+        Piece white5 = new Piece(5,1, GamePieceColour.WHITE, pieceSet, this);
+        pieceSet.add(white5);
 
-        Piece white6 = new Piece(5,5, GamePieceColour.WHITE, pieceListPlayState, this);
-        pieceListPlayState.add(white6);
+        Piece white6 = new Piece(5,5, GamePieceColour.WHITE, pieceSet, this);
+        pieceSet.add(white6);
 
-        Piece white7 = new Piece(3,5, GamePieceColour.WHITE, pieceListPlayState, this);
-        pieceListPlayState.add(white7);
+        Piece white7 = new Piece(3,5, GamePieceColour.WHITE, pieceSet, this);
+        pieceSet.add(white7);
 
-        Piece white8 = new Piece(3,1, GamePieceColour.WHITE, pieceListPlayState,this);
-        pieceListPlayState.add(white8);
+        Piece white8 = new Piece(3,1, GamePieceColour.WHITE, pieceSet,this);
+        pieceSet.add(white8);
 
-        Piece white9 = new Piece(3,3, GamePieceColour.WHITE, pieceListPlayState,this);
-        pieceListPlayState.add(white9);
+        Piece white9 = new Piece(3,3, GamePieceColour.WHITE, pieceSet,this);
+        pieceSet.add(white9);
     }
 
     private void setMouseListeners(){
@@ -155,12 +162,16 @@ public class MainField extends JFrame{
 //                if (taking){
 //                    taking(e);
 //                }
+
+                if(takenPiece.contains(selectedPiece)) selectedPiece = null;
+
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                Position position;
+
                 System.out.println("Released: " +e.getX() + " " + e.getY());
+
                 if (taking && selectedPiece!=null){
 //                    System.out.println("taking");
                     taking(e);
@@ -172,9 +183,12 @@ public class MainField extends JFrame{
                     }
                     else if(currentPlayer == 6){
                         JOptionPane.showMessageDialog(null, "Now get Moving !",
-                                "Placing is over", JOptionPane.INFORMATION_MESSAGE);
+                        "Placing is over", JOptionPane.INFORMATION_MESSAGE);
+
+                        isTrue = true;
 
                         System.out.println("moving!");
+                        currentPlayer++;
                         moving(e);
                         currentPlayer++;
                     }
@@ -291,19 +305,51 @@ public class MainField extends JFrame{
 //            System.out.println("TRY:");
             Position position = new Position(selectedPiece.getX(), selectedPiece.getY());
 //            System.out.println("1");
-            Random rand = new Random();
+
 //            System.out.println("2");
             int i = selectedPiece.colour.getAvailable();
 //            System.out.println("3 Player: " + i);
             if (i != currentPlayer){
                 System.out.println("taking");
-                System.out.println("Position Object of selected Piece: "+ position.toString());
+                System.out.println("Position Object of selected Piece: "+ position);
+
                 movement.take(movement.whichPosition(new Position(e.getX(),e.getY())));
                 position.setAvailable(0);
-                selectedPiece.move(rand.nextInt( 1350)+1620, rand.nextInt(110)+320);
+                takenPiece.add(selectedPiece);
+
+                if (selectedPiece.getColour() == GamePieceColour.WHITE){
+                    selectedPiece.move(3, 10);
+                }else {
+                    selectedPiece.move(23, 2);
+                }
+
+                pieceSet.remove(selectedPiece);
                 jFrame.repaint();
                 movement.printGameField();
             }
+
+            Set<Piece> whitePieceSet = createPiece(GamePieceColour.WHITE);
+            Set<Piece> blackPieceSet = createPiece(GamePieceColour.BLACK);
+
+            whitePieceCnt = whitePieceSet.size() - 1;
+            blackPieceCnt = blackPieceSet.size() - 1;
+
+            if (whitePieceCnt == 8 ){
+                JOptionPane.showMessageDialog(null, "Game is over white won!",
+                        "Game end", JOptionPane.INFORMATION_MESSAGE);
+               jFrame.dispatchEvent(new WindowEvent(jFrame, WindowEvent.WINDOW_CLOSING));
+
+            }else if (blackPieceCnt == 8){
+                JOptionPane.showMessageDialog(null, "Game is over black won!",
+                        "Game end", JOptionPane.INFORMATION_MESSAGE);
+                jFrame.dispatchEvent(new WindowEvent(jFrame, WindowEvent.WINDOW_CLOSING));
+
+            }
+
+            whitePieceSet.clear();
+            blackPieceSet.clear();
+            whitePieceSet = null;
+            blackPieceSet = null;
         } catch (Exception ex) {
             ex.printStackTrace();
             xBefore = e.getX();
@@ -312,6 +358,18 @@ public class MainField extends JFrame{
         }
 
     }
+
+    private Set<Piece> createPiece(GamePieceColour gamePieceColour){
+        Set<Piece> pieces = new HashSet<>();
+        for (Piece piece:
+                pieceSet) {
+            if (piece.getColour() == gamePieceColour){
+                pieces.add(piece);
+            }
+        }
+        return pieces;
+    }
+
 
     public static void setTaking(boolean taking) {
         MainField.taking = taking;
@@ -334,7 +392,7 @@ public class MainField extends JFrame{
     }
 
     private JPanel renderJPanel(){
-        JPanel jPanel = new JPanel(){
+        return new JPanel(){
             @Override
             public void paint(Graphics g) {
 
@@ -347,8 +405,19 @@ public class MainField extends JFrame{
                 g2.drawImage(img, 0, 0, jFrame.getWidth(), jFrame.getHeight(), this);
 
 
+                System.out.println("PieceSet Size: "+pieceSet.size());
+                System.out.println("TakenSet Size: "+takenPiece.size());
+
                 for (Piece p:
-                        pieceListPlayState) {
+                        pieceSet) {
+                    if (p.getColour().getAvailable() == 1){
+                        g2.drawImage(imageWhite, p.getX(), p.getY(), this);
+                    }else
+                        g2.drawImage(imageBlack, p.getX(), p.getY(), this);
+                }
+
+                for (Piece p:
+                        takenPiece) {
                     if (p.getColour().getAvailable() == 1){
                         g2.drawImage(imageWhite, p.getX(), p.getY(), this);
                     }else
@@ -357,7 +426,6 @@ public class MainField extends JFrame{
 
             }
         };
-        return jPanel;
     }
 
     public static void main(String[] args) {
