@@ -130,25 +130,34 @@ public class CheckLogic {
 //        The midpoint of the field is (1200|675)
         List<Position> half1 = new ArrayList<>();
         List<Position> half2 = new ArrayList<>();
-        if (xy == 'x'){
+        if (xy == 'y'){
             for (Position position : foundObjects){
-                if (position.getCoord('x') < 1200){
+                if (position.getCoord('x') < 845){
                     half1.add(position);
                 }
-                else if (position.getCoord('x') > 1200){
+                else if (position.getCoord('x') > 845){
                     half2.add(position);
                 }
             }
         }
-        else if (xy == 'y'){
+        else if (xy == 'x'){
             for (Position position : foundObjects){
-                if (position.getCoord('y') < 675){
+                if (position.getCoord('y') < 500){
                     half1.add(position);
                 }
-                else if (position.getCoord('y') > 675){
+                else if (position.getCoord('y') > 500){
                     half2.add(position);
                 }
             }
+        }
+
+        System.out.println("Half 1: ");
+        for (Position position : half1){
+            System.out.println(position.toString());
+        }
+        System.out.println("Half 2: ");
+        for (Position position : half2){
+            System.out.println(position.toString());
         }
 //      Ensure that there are three tokens on a lane and with that
 //      a mill is formed

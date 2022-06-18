@@ -4,6 +4,8 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 
@@ -22,6 +24,17 @@ public class MenuDlg extends JDialog {
         ImageIcon buttonImage = new ImageIcon(this.getClass().getResource("/holzplanke.png"));
         JLabel backgroundLabel = new JLabel(background);
         backgroundLabel.setSize(1680, 945);
+
+        /* Streng Geheim / Top Secret **** */
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                System.out.println("Close Dialog");
+                System.exit(0);
+            }
+        });
+        /* Streng Geheim / Top Secret **** */
 
         try {
             this.playAudio();
@@ -50,6 +63,8 @@ public class MenuDlg extends JDialog {
                 dispose();
             }});
     }
+
+
 
     private void playAudio() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         String path = System.getProperty("user.dir");
