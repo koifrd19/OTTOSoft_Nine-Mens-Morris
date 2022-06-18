@@ -24,6 +24,7 @@ public class MenuDlg extends JDialog {
         ImageIcon buttonImage = new ImageIcon(this.getClass().getResource("/holzplanke.png"));
         JLabel backgroundLabel = new JLabel(background);
         backgroundLabel.setSize(1680, 945);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         /* Streng Geheim / Top Secret **** */
         this.addWindowListener(new WindowAdapter() {
