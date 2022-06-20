@@ -32,6 +32,11 @@ public class Piece {
         ps.add(this);
     }
 
+    public void moveToCoordinate(int x, int y){
+        setX(x);
+        setY(y);
+    }
+
     public void move(int xp,int yp){
         if(game.getPiece(xp * 64, yp * 64)!=null){
             //if(game.getPiece(xp64, yp64).colour!=colour){
