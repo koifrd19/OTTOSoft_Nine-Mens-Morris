@@ -1,6 +1,9 @@
 package at.kaindorf.mill.beans;
 
-public class Position {
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode
+public class Position{
 
 //    Overview of the numbering
 private int posNR;

@@ -158,7 +158,7 @@ public class MainField extends JFrame{
                 xBefore = e.getX();
                 yBefore = e.getY();
 
-                System.out.println("Pressed: " +xBefore + " " + yBefore +" taking: " + taking);
+                System.out.println("Pressed: " +xBefore + " " + yBefore +" taking: " + taking+ "player counter"+ currentPlayer);
 //                if (taking){
 //                    taking(e);
 //                }
@@ -178,12 +178,11 @@ public class MainField extends JFrame{
                     taking = false;
                 }
                 else if (selectedPiece != null) {
-                    if (currentPlayer <= 5){
+                    if (currentPlayer <= 17){
                         placing(e);
                     }
-                    else if(currentPlayer == 6){
-                        JOptionPane.showMessageDialog(null, "Now get Moving !",
-                        "Placing is over", JOptionPane.INFORMATION_MESSAGE);
+                    else if(currentPlayer == 18){
+
 
                         isTrue = true;
 
@@ -193,6 +192,10 @@ public class MainField extends JFrame{
                         currentPlayer++;
                     }
                     else{
+                        if (isJumping((currentPlayer % 2) + 1)){
+                            System.out.println("jumping!");
+                            jumping(e);
+                        }
                         System.out.println("moving!");
                         moving(e);
                     }
@@ -242,6 +245,10 @@ public class MainField extends JFrame{
                 yAfter = e.getY();
 
                 System.out.println("Released: " +xAfter + " " + yAfter);
+                if (currentPlayer == 18){
+                    JOptionPane.showMessageDialog(null, "Now get Moving !",
+                            "Placing is over", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
             else{
                 throw new Exception("no valid place or piece already placed");
@@ -255,7 +262,6 @@ public class MainField extends JFrame{
     }
 
     private void moving(MouseEvent e){
-        System.out.println("moving");
 
         Move move;
         Position start, destination;
@@ -299,6 +305,49 @@ public class MainField extends JFrame{
 //        }
     }
 
+    private void jumping(MouseEvent e){
+
+        Move move;
+        Position start, destination;
+        try {
+            if (selectedPiece.colour.getAvailable() != (currentPlayer % 2) + 1) {
+                throw new Exception(selectedPiece.colour.getAvailable() + " should jump with a token");
+            }
+
+            destination = movement.whichPosition(new Position(e.getX(), e.getY()));
+            start = movement.whichPosition(new Position(xBefore, yBefore));
+
+            move = new Move(start.getPosNR(), destination.getPosNR());
+
+//            if (movement.isValidMove(move)) {
+
+                movement.move(start, destination, (currentPlayer % 2) + 1);
+
+                System.out.println("Player: " + currentPlayer++);
+
+                movement.printGameField();
+
+                selectedPiece.move(destination.getXCoord() / 64, destination.getYCoord() / 64);
+                jFrame.repaint();
+
+                xBefore = xAfter;
+                yBefore = yAfter;
+
+                xAfter = e.getX();
+                yAfter = e.getY();
+
+                System.out.println("Released: " + xAfter + " " + yAfter);
+           /* } else {
+                throw new Exception("no valid move! start: " + start.getPosNR() + " destination: " + destination.getPosNR());
+            }*/
+        } catch (Exception ex) {
+            System.out.println("moving back");
+            selectedPiece.move(xBefore / 64, yBefore / 64);
+            jFrame.repaint();
+            ex.printStackTrace();
+        }
+    }
+
     private void taking(MouseEvent e){
 //        System.out.println("taking");
         try {
@@ -334,12 +383,12 @@ public class MainField extends JFrame{
             whitePieceCnt = whitePieceSet.size() - 1;
             blackPieceCnt = blackPieceSet.size() - 1;
 
-            if (whitePieceCnt == 8 ){
+            if (whitePieceCnt <3 ){
                 JOptionPane.showMessageDialog(null, "Game is over white won!",
                         "Game end", JOptionPane.INFORMATION_MESSAGE);
                jFrame.dispatchEvent(new WindowEvent(jFrame, WindowEvent.WINDOW_CLOSING));
 
-            }else if (blackPieceCnt == 8){
+            }else if (blackPieceCnt <3){
                 JOptionPane.showMessageDialog(null, "Game is over black won!",
                         "Game end", JOptionPane.INFORMATION_MESSAGE);
                 jFrame.dispatchEvent(new WindowEvent(jFrame, WindowEvent.WINDOW_CLOSING));
@@ -357,6 +406,15 @@ public class MainField extends JFrame{
             System.out.println("Taking pressed: " +xBefore + " " + yBefore);
         }
 
+    }
+
+    private boolean isJumping(int player){
+        if (player == 1) {
+            return whitePieceCnt<=3;
+        }
+        else{
+            return blackPieceCnt <=3;
+        }
     }
 
     private Set<Piece> createPiece(GamePieceColour gamePieceColour){
@@ -405,8 +463,8 @@ public class MainField extends JFrame{
                 g2.drawImage(img, 0, 0, jFrame.getWidth(), jFrame.getHeight(), this);
 
 
-                System.out.println("PieceSet Size: "+pieceSet.size());
-                System.out.println("TakenSet Size: "+takenPiece.size());
+//                System.out.println("PieceSet Size: "+pieceSet.size());
+//                System.out.println("TakenSet Size: "+takenPiece.size());
 
                 for (Piece p:
                         pieceSet) {

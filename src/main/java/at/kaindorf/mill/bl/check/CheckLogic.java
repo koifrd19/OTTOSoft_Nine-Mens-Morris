@@ -7,6 +7,7 @@ import at.kaindorf.mill.gui.game.MainField;
 import at.kaindorf.mill.io_helper.postitions.PositionData;
 
 import javax.swing.*;
+import javax.swing.text.html.parser.Element;
 import java.io.IOException;
 import java.util.*;
 
@@ -55,100 +56,159 @@ public class CheckLogic {
         for (Position position : positionList){
             if (position.getAvailable()==player) {nAvailablePositions.add(position);}
         }
-//       remove the current mills to in order to avoid getting the same mill
-        /*for (Mill mill : currentMills.get(player)){
-           nAvailablePositions.remove(mill.getPos1());
-           nAvailablePositions.remove(mill.getPos2());
-           nAvailablePositions.remove(mill.getPos3());
-        }*/
 
 
 //      List to store the Objects, which were found
-//      Second (der beschissene Part): Find all mills with
+//      Second: (der beschissene Part): Find all mills with
 //      thousands of for-loops :)
-        List<Position> foundObjects = findXorYMills(nAvailablePositions,'x');
+
+        /*List<Position> foundObjects = findXorYMills(nAvailablePositions,'x');
         manageCurrentMills(foundObjects, 'x', player);
+//       manage the current mills to in order to avoid getting the same mill
+        if (foundObjects != null){
+            return true;
+        }
 
         foundObjects = findXorYMills(nAvailablePositions, 'y');
         manageCurrentMills(foundObjects, 'y', player);
+//       manage the current mills to in order to avoid getting the same mill
+        if (foundObjects != null){
+            return true;
+        }*/
+
+        List<Mill> foundXMills = findXorYMills(nAvailablePositions, 'x');
+        manageCurrentMills(foundXMills,'x', player);
+        /*if (foundXMills != null){
+            return true;
+        }*/
+
+        List<Mill> foundYMills = findXorYMills(nAvailablePositions, 'y');
+        manageCurrentMills(foundYMills,'y', player);
+        /*if (foundYMills != null){
+            return true;
+        }*/
 
         return MainField.isTaking();
     }
 
 //  Method to find vertical or horizontal mills
-    private List<Position> findXorYMills(List<Position> nAvailablePositions, char xy){
+    private List<Mill> findXorYMills(List<Position> nAvailablePositions, char xy){
+
+        System.out.println("findXorYMills on: "+ xy +"-axe");
+
+        List<Mill> foundMills = new ArrayList<>();
 
         List<Position> copyList;
+//            Fill the copied List with content again
+        copyList = new ArrayList<>(nAvailablePositions);
 
         List<Position> foundObjects = new ArrayList<>();
 
+        for (int i = 0; i < 5;i++) {
 //      Look for every Position if there are tokens beside
-        for (Position position : nAvailablePositions) {
-//            Fill the copied List with content again
-            copyList = new ArrayList<>(nAvailablePositions);
-            foundObjects.add(position);
+            for (Position position : nAvailablePositions) {
+                foundObjects.add(position);
 //            Remove this Position in order to avoid getting
 //            the same Position twice
-            copyList.remove(position);
+                copyList.remove(position);
 //            Look for tokens on the same lane
-            for (Position posit : copyList) {
-                if (posit.getCoord(xy) == position.getCoord(xy)) {
-                    foundObjects.add(posit);
+                for (Position posit : copyList) {
+                    if (posit.getCoord(xy) == position.getCoord(xy)) {
+                        foundObjects.add(posit);
+                    }
                 }
-            }
 //            Check if there are more than two tokens on a lane
 //            (on a middle lane there can be 5)
-            if (foundObjects.size()>2){
+                if (foundObjects.size() >= 3) {
 //                Check if the tokens are on the same lane
-                if (isALane(foundObjects, xy)) return foundObjects;
+                    if (isALane(foundObjects, xy)) foundMills.add(convToMill(foundObjects));
+                }
+                foundObjects.clear();
             }
-            foundObjects.clear();
+            System.out.println("WAASSS");
+            nAvailablePositions = new ArrayList<>(copyList);
+            System.out.println("Ist denn hier los!");
         }
+        if (foundMills.isEmpty()){
+            return null;}
 
-
-
-        return null;
+        return foundMills;
     }
+
+
 
 //  Method to determine if the three tokens are really next to each other
     private boolean isALane(List<Position> foundObjects, char xy){
 
+        System.out.println("isALane!");
+
+        System.out.println(foundObjects.size() +" found Objects size");
+
+        printList(foundObjects);
+
 //       check if the tokens are on the middle lane
 //        if not there is a mill
-        int pos = foundObjects.get(0).getPosNR();
 
-        if (foundObjects.size() == 3 && pos != 1 && pos != 2 && pos != 5 ){
-            pos = foundObjects.get(1).getPosNR();
-            if (pos != 1 && pos != 2 && pos != 5){
-                pos = foundObjects.get(2).getPosNR();
-                if ( pos != 1 && pos != 2 && pos != 5 ){
-                    return true;
-                }
-            }
+        List<Integer> posNrs = new ArrayList<>();
+
+        for (Position position : foundObjects){
+            posNrs.add(position.getPosNR());
         }
-//        Divide into Left or Right -/ Upper or Lower Half
-//        The midpoint of the field is (1200|675)
+
         List<Position> half1 = new ArrayList<>();
         List<Position> half2 = new ArrayList<>();
-        if (xy == 'y'){
-            for (Position position : foundObjects){
-                if (position.getCoord('x') < 845){
-                    half1.add(position);
+
+        if (posNrs.contains(1) && posNrs.contains(2) && posNrs.contains(5)) {
+//        Divide into Left or Right -/ Upper or Lower Half
+//        The midpoint of the field is (1200|675)
+            if (xy == 'x') {
+                for (Position position : foundObjects) {
+                    if (position.getCoord('y') <= 500) {
+                        half1.add(position);
+                    } else if (position.getCoord('y') >= 500) {
+                        half2.add(position);
+                    }
+
                 }
-                else if (position.getCoord('x') > 845){
-                    half2.add(position);
+            } else if (xy == 'y') {
+                for (Position position : foundObjects) {
+                    if (position.getCoord('x') < 845) {
+                        half1.add(position);
+                    } else if (position.getCoord('x') > 845) {
+                        half2.add(position);
+                    }
                 }
+
             }
         }
-        else if (xy == 'x'){
-            for (Position position : foundObjects){
-                if (position.getCoord('y') < 500){
-                    half1.add(position);
+        else if (posNrs.contains(1) || posNrs.contains(2) || posNrs.contains(5)){
+
+                if (posNrs.indexOf(1) == posNrs.lastIndexOf(1)){
+                    if (posNrs.indexOf(2) == posNrs.lastIndexOf(2)){
+                        if (posNrs.indexOf(5) == posNrs.lastIndexOf(5)){
+                            return true;
+                        }
+                    }
                 }
-                else if (position.getCoord('y') > 500){
-                    half2.add(position);
+            return false;
+            /*int[] ints = new int[3];
+            ints[0] = 1;
+            ints[1] = 2;
+            ints[2]= 5;
+            for (int i = 0; i < ints.length; i++) {
+                int finalI = i;
+                String str = ""+posNrs.get(0).intValue() +posNrs.get(1).intValue()+ posNrs.get(2).intValue();
+                long x = str
+                        .chars()
+                        .filter(c -> c == ints[finalI])
+                        .count();
+                if (x != 1){
+                    return false;
                 }
-            }
+            }*/
+        }
+        else{
+            return true;
         }
 
         System.out.println("Half 1: ");
@@ -162,11 +222,11 @@ public class CheckLogic {
 //      Ensure that there are three tokens on a lane and with that
 //      a mill is formed
         if (half1.size() == 3)return true;
-        else if (half2.size() == 3) return true;
-        else return false;
+            else if (half2.size() == 3) return true;
+            else return false;
     }
 
-    private void manageCurrentMills(List<Position> foundObjects, char xy, int player){
+   /* private void manageCurrentMills(List<Position> foundObjects, char xy, int player){
         if(foundObjects != null) {
             for (Mill mill : currentMills.get(player)) {
                 if(convToMill(foundObjects).equals(mill)){
@@ -179,6 +239,30 @@ public class CheckLogic {
             currentMills.get(player).add(convToMill(foundObjects));
             JOptionPane.showMessageDialog(null, "Please take a Stone!", "Mill is formed by Player " + player, JOptionPane.INFORMATION_MESSAGE);
             MainField.setTaking(true);
+        }
+    }*/
+
+    private void manageCurrentMills(List<Mill> foundMills, char xy, int player){
+
+        if(foundMills != null) {
+            List<Mill> copyOfFoundMills = new ArrayList<>(foundMills);
+            for (Mill foundMill : foundMills){
+                for (Mill mill : currentMills.get(player)) {
+                    if(foundMill.equals(mill)){
+//                    If the found Object equals a current Mill, the Mill is already formed
+                        System.out.println("Hello from the other siiiideeee!!");
+                        copyOfFoundMills.remove(foundMill);
+                    }
+                }
+            }
+            if(copyOfFoundMills.size() != 0) {
+                Mill newMill = copyOfFoundMills.get(0);
+                System.out.println(xy + "-axe Mill");
+                printMill(newMill);
+                currentMills.get(player).add(newMill);
+                JOptionPane.showMessageDialog(null, "Please take a Stone!", "Mill is formed by Player " + player, JOptionPane.INFORMATION_MESSAGE);
+                MainField.setTaking(true);
+            }
         }
     }
 
@@ -246,6 +330,19 @@ public class CheckLogic {
             for (Position position : printList) {
                 System.out.println(position);
             }
+    }
+
+    private void printMill(Mill mill){
+        System.out.println("is formed on:"+ mill.toString());
+        /*for (Position position : printList) {
+            System.out.println(position);
+        }*/
+    }
+
+    public void printList(List list){
+        for(Object o : list){
+            System.out.println(o.toString());
+        }
     }
 
     public static void main(String[] args) {

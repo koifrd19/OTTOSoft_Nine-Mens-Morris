@@ -16,7 +16,6 @@ public enum GamePieceColour {
         return available;
     }
 
-    public String getColour(int player){
-        return "";
+    public String getColour(int player){return "";
     }
 }
